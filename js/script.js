@@ -2,7 +2,8 @@
 
 //Big Picture Steps
 //1.  Select elements and add placeholders (1-3)
-//2.  Accept and validate player guesses (4-)
+//2.  Accept and validate player guesses (4-7)
+//3.  Display word and guessed letters (8-)
 
 //Steps:
 //1.  Create global variables
@@ -12,6 +13,9 @@
 //5.  Validate input in the button event handler
 //6.  Add new global variable for player guesses
 //7.  Create a function to capture input
+//8.  Create a function to show guessed letters
+//9.  Create a function to update the word in progress
+//10. Createa function to check if player won
 
 //1. CREATE GLOBAL VARIABLES
 //Unordered list where guessed letters will appear
@@ -35,6 +39,7 @@ const playAgainButton = document.querySelector(".play-again");
 const word = "magnolia";
 //6.  Global variable for player guesses
 const guessedLetter = [];
+
 
 //2.  ADD PLACEHOLDERS
 //Create and name a function to add placeholders for each letter
@@ -92,7 +97,7 @@ guessLetterButton.addEventListener("click", function (e) {
   };
 
 
-  //7.  Create a function to capture input
+  //7.  CREATE A FUNCTION TO CAPTURE INPUT
   //Add guess to guessed letters array if it hasn't been guessed
   const makeGuess = function (guess) {
     guess = guess.toUpperCase();
@@ -101,5 +106,54 @@ guessLetterButton.addEventListener("click", function (e) {
     } else {
       guessedLetter.push(guess);
       console.log(guessedLetter);
+      guessed();
+      updateWordInProgress(guessedLetter);
+    }
+  };
+
+
+  //8.  Create a function to show guessed letters
+  const guessed = function () {
+    guessedLettersElement.innerHTML = "";
+    for (const letter of guessedLetter) {
+      const li = document.createElement("li");
+      li.innerText = letter;
+      guessedLettersElement.append(li);
+    }
+  };
+
+  //My original code for step 8 - seem to get the same result, why do I have to create an element list?
+  /*const guessed = function () {
+    guessedLettersElement.innerHTML = "";
+    for (let letter of guessedLetter) {
+    guessedLettersElement.append(letter);
+    }
+  };*/
+
+  //9.  Create a function to update the word in progress
+  //Split the word string into an arary so that it can appear in guessedLetter array
+  const updateWordInProgress = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const revealWord = [];
+    for (const letter of wordArray) {
+      if (guessedLetters.includes(letter)) {
+        revealWord.push(letter.toUpperCase());
+      } else {
+        //revealWord.push("☀️");
+        revealWord.push("●");
+      }
+    }
+    // console.log(revealWord);
+    wordInProgress.innerText = revealWord.join("");
+    checkIfWin();
+
+  };
+  
+  //10. Create a function to check if they won
+  const checkIfWin = function () {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+      message.classList.add("win");
+      message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
     }
   };
