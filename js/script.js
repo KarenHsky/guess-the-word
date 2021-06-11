@@ -3,7 +3,8 @@
 //Big Picture Steps
 //1.  Select elements and add placeholders (1-3)
 //2.  Accept and validate player guesses (4-7)
-//3.  Display word and guessed letters (8-)
+//3.  Display word and guessed letters (8-10)
+//4.  Fetch words and remaining guesses (11-)
 
 //Steps:
 //1.  Create global variables
@@ -16,6 +17,9 @@
 //8.  Create a function to show guessed letters
 //9.  Create a function to update the word in progress
 //10. Createa function to check if player won
+//11. Declare a global variable for the number of guesses
+//12. Create a function to count guesses remaining
+
 
 //1. CREATE GLOBAL VARIABLES
 //Unordered list where guessed letters will appear
@@ -39,6 +43,8 @@ const playAgainButton = document.querySelector(".play-again");
 const word = "magnolia";
 //6.  Global variable for player guesses
 const guessedLetter = [];
+//11. Global variable for the number of guesses
+const remainingGuesses = 8;
 
 
 //2.  ADD PLACEHOLDERS
@@ -106,14 +112,16 @@ guessLetterButton.addEventListener("click", function (e) {
     } else {
       guessedLetter.push(guess);
       console.log(guessedLetter);
-      guessed();
+      updateGuessesRemaining(guess);
+      showGuessedLetters();
       updateWordInProgress(guessedLetter);
+  
     }
   };
 
 
   //8.  Create a function to show guessed letters
-  const guessed = function () {
+  const showGuessedLetters = function () {
     guessedLettersElement.innerHTML = "";
     for (const letter of guessedLetter) {
       const li = document.createElement("li");
@@ -150,6 +158,27 @@ guessLetterButton.addEventListener("click", function (e) {
 
   };
   
+ 
+ //11.  Create function to count guesses remaining
+ const updateGuessesRemaining = function (guess) {
+  const upperWord = word.toUpperCase();
+  if (!upperWord.includes(guess)) {
+    message.innerText = `Sorry, the word has no ${guess}.`;
+    remainingGuesses -= 1;
+  } else {
+    message.innerText = `Good guess! The word has the letter ${guess}.`;
+  }
+
+  if (remainingGuesses === 0) {
+    message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.  Play again!`;
+  } else if (remainingGuesses === 1) {
+    remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
+  } else {
+    remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+  }
+};
+
+
   //10. Create a function to check if they won
   const checkIfWin = function () {
     if (word.toUpperCase() === wordInProgress.innerText) {
@@ -157,3 +186,6 @@ guessLetterButton.addEventListener("click", function (e) {
       message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
     }
   };
+
+
+
