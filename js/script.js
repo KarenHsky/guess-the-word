@@ -4,7 +4,8 @@
 //1.  Select elements and add placeholders (1-3)
 //2.  Accept and validate player guesses (4-7)
 //3.  Display word and guessed letters (8-10)
-//4.  Fetch words and remaining guesses (11-)
+//4.  Fetch words and remaining guesses (11-13)
+//5.  Play again (clear and reset) (14-15)
 
 //Steps:
 //1.  Create global variables
@@ -19,7 +20,10 @@
 //10. Createa function to check if player won
 //11. Declare a global variable for the number of guesses
 //12. Create a function to count guesses remaining
-//13. Add an async function
+//13. Add an async function and call function (placeholder)
+//14. Create function to hide and show elements
+//15. Add click event to to Play Again button and reset original values
+
 
 
 //1. CREATE GLOBAL VARIABLES
@@ -43,7 +47,7 @@ const playAgainButton = document.querySelector(".play-again");
 //Create a global variable for the word being guessed and give it a value
 let word = "magnolia";
 //6.  Global variable for player guesses
-const guessedLetter = [];
+let guessedLetter = [];
 //11. Global variable for the number of guesses
 let remainingGuesses = 8;
 
@@ -195,6 +199,7 @@ guessLetterButton.addEventListener("click", function (e) {
 
   if (remainingGuesses === 0) {
     message.innerHTML = `Game over! The word was <span class="highlight">${word.toUpperCase()}</span>.  Play again!`;
+    startOver();
   } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
   } else {
@@ -204,11 +209,38 @@ guessLetterButton.addEventListener("click", function (e) {
 
 
   //10. Create a function to check if they won
-  const checkIfWin = function () {
-    if (word.toUpperCase() === wordInProgress.innerText) {
-      message.classList.add("win");
-      message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
-    }
+const checkIfWin = function () {
+  if (word.toUpperCase() === wordInProgress.innerText) {
+    message.classList.add("win");
+     message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+    startOver();
+  }
+};
+
+
+//14.  Create function to hide/show elements
+  const startOver = function () {
+    guessLetterButton.classList.add("hide");
+    remainingGuessesElement.classList.add("hide");
+    guessedLettersElement.classList.add("hide");
+    playAgainButton.classList.remove("hide");
   };
 
+  
+//15.  Click event to Play Again - reset all original values and grab new word
+  playAgainButton.addEventListener("click", function() {
+    message.classList.remove("win"); 
+    guessedLetter = [];
+    remainingGuesses = 8;
+    message.innerText = "";
+    remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+    guessedLettersElement.innerHTML = "";
+    
+    getWord();
+       
+    guessLetterButton.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+    remainingGuessesElement.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
 
+    });
