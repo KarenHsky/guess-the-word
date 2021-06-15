@@ -19,6 +19,7 @@
 //10. Createa function to check if player won
 //11. Declare a global variable for the number of guesses
 //12. Create a function to count guesses remaining
+//13. Add an async function
 
 
 //1. CREATE GLOBAL VARIABLES
@@ -40,11 +41,33 @@ const message = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
 
 //Create a global variable for the word being guessed and give it a value
-const word = "magnolia";
+let word = "magnolia";
 //6.  Global variable for player guesses
 const guessedLetter = [];
 //11. Global variable for the number of guesses
-const remainingGuesses = 8;
+let remainingGuesses = 8;
+
+
+//13.  Add async function
+const getWord = async function () {
+  const res = await fetch ("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
+  const words = await res.text();
+  //console.log(words);
+  const wordArray = words.split("\n");
+  console.log(wordArray);
+  const randomIndex = Math.floor(Math.random() * wordArray.length);
+  word = wordArray[randomIndex].trim();
+  console.log(word);
+  placeholder(word);
+  //const randomWord = Math.floor(Math.random() * wordArray.length); //My way from Google, need the additional line to pull random word.
+  //console.log(randomWord, wordArray[randomWord]); //index and value returned
+ 
+};
+
+getWord();
+
+
+
 
 
 //2.  ADD PLACEHOLDERS
@@ -61,7 +84,7 @@ const placeholder = function (word) {
     wordInProgress.innerText = placeholderLetters.join("");
   };
 
-  placeholder(word);
+  //placeholder(word);
 
 
 //3.  ADD EVENT LISTENER FOR THE BUTTON  
@@ -160,17 +183,18 @@ guessLetterButton.addEventListener("click", function (e) {
   
  
  //11.  Create function to count guesses remaining
+ // -= 1 lets you subtract a value and then assign that value to the variable.  Nifty.
  const updateGuessesRemaining = function (guess) {
   const upperWord = word.toUpperCase();
   if (!upperWord.includes(guess)) {
     message.innerText = `Sorry, the word has no ${guess}.`;
-    remainingGuesses -= 1;
+    remainingGuesses -= 1; 
   } else {
     message.innerText = `Good guess! The word has the letter ${guess}.`;
   }
 
   if (remainingGuesses === 0) {
-    message.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.  Play again!`;
+    message.innerHTML = `Game over! The word was <span class="highlight">${word.toUpperCase()}</span>.  Play again!`;
   } else if (remainingGuesses === 1) {
     remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
   } else {
@@ -186,6 +210,5 @@ guessLetterButton.addEventListener("click", function (e) {
       message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
     }
   };
-
 
 
