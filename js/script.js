@@ -43,6 +43,8 @@ const remainingGuessesSpan = document.querySelector(".remaining span");
 const message = document.querySelector(".message");
 //Hidden play again button
 const playAgainButton = document.querySelector(".play-again");
+//Text input LABEL
+const inputLabel = document.querySelector("label");
 
 //Create a global variable for the word being guessed and give it a value
 let word = "magnolia";
@@ -224,6 +226,9 @@ const checkIfWin = function () {
     remainingGuessesElement.classList.add("hide");
     guessedLettersElement.classList.add("hide");
     playAgainButton.classList.remove("hide");
+    letterInput.classList.add("hide");
+    inputLabel.classList.add("hide");
+
   };
 
   
@@ -242,5 +247,7 @@ const checkIfWin = function () {
     playAgainButton.classList.add("hide");
     remainingGuessesElement.classList.remove("hide");
     guessedLettersElement.classList.remove("hide");
+    letterInput.classList.remove("hide");
+    inputLabel.classList.remove("hide");
 
     });
